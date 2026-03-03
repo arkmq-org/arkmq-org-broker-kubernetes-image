@@ -1,4 +1,6 @@
-# ArkMQ Broker Kubernetes container image
+# ArkMQ Broker Kubernetes container image powered by https://artemis.apache.org/[Apache Artemis]
+
+ArkMQ Broker Kubernetes is a container image for running https://artemis.apache.org/[Apache Artemis] messaging broker in containerized environments.
 
 NOTE: Extends link:https://github.com/arkmq-org/arkmq-org-broker-image[ArkMQ Broker container image]
 
@@ -23,7 +25,7 @@ The ArkMQ Broker Kubernetes container images are pushed to https://quay.io/repos
 
 The ArkMQ Broker Kubernetes container images have release tags and special tags.
 
-The image release tags point to images built from the sources of the releated release tags,
+The image release tags point to images built from the sources of the related release tags,
 i.e. the `1.0.0` image release tag points to the image built from
 the sources of the [v1.0.0](https://github.com/arkmq-org/arkmq-org-broker-kubernetes-image/tree/v1.0.0) release tag
 

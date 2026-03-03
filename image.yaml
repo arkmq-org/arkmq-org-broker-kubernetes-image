@@ -1,7 +1,7 @@
 schema_version: 1
 
 name: "arkmq-org/arkmq-org-broker-kubernetes"
-description: "ArkMQ Broker Kubernetes container image"
+description: "ArkMQ Broker Kubernetes is a container image for running Apache Artemis messaging broker in containerized environments"
 version: "2.0.12"
 from: "quay.io/arkmq-org/arkmq-org-broker@sha256:8d19b81167e7d8d85996570cc02d56a0809018f1c753cf1644a68020453bee0c"
 
@@ -12,6 +12,12 @@ labels:
     value: "ArkMQ Broker"
   - name: "maintainer"
     value: "ArkMQ <info@arkmq.org>"
+  - name: "org.opencontainers.image.title"
+    value: "ArkMQ Broker Kubernetes Powered by Apache Artemis"
+  - name: "org.opencontainers.image.description"
+    value: "ArkMQ Broker Kubernetes is a container image for running Apache Artemis messaging broker in containerized environments"
+  - name: "org.opencontainers.image.vendor"
+    value: "ArkMQ"
   - name: "io.openshift.tags"
     value: "messaging,artemis,java,xpaas"
   - name: "io.openshift.s2i.scripts-url"
