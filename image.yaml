@@ -2,7 +2,7 @@ schema_version: 1
 
 name: "arkmq-org/arkmq-org-broker-kubernetes"
 description: "ArkMQ Broker Kubernetes is a container image for running Apache Artemis messaging broker in containerized environments"
-version: "2.0.12"
+version: "2.0.13"
 from: "quay.io/arkmq-org/arkmq-org-broker@sha256:8d19b81167e7d8d85996570cc02d56a0809018f1c753cf1644a68020453bee0c"
 
 labels:
