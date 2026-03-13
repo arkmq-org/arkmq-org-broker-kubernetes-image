@@ -72,7 +72,7 @@ jobs:
           sed -i "s~from.*~from: \"${BASE_IMAGE}\"~g" image.yaml
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Build the image
         run: |
