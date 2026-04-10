@@ -168,7 +168,9 @@ artifacts:
       target: "prometheus.jar"
 
 run:
-  user: 185
+  # The user is in the group 0 to have access to the volumes mounted
+  # by Kubernetes that are typically owned by UID 0 (root) and GID 0 (root).
+  user: "185:0"
   cmd:
     - "/opt/amq/bin/launch.sh"
     - "start"
