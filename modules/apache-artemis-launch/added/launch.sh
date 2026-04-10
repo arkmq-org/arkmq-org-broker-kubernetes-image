@@ -6,7 +6,8 @@ if [ "${SCRIPT_DEBUG}" = "true" ] ; then
 fi
 
 
-export BROKER_IP=`hostname -f`
+BROKER_HOST=${AMQ_BROKER_HOST:-`hostname -f`}
+WEB_HOST=${AMQ_WEB_HOST:-`hostname -f`}
 CONFIG_TEMPLATES=/config_templates
 
 #GC Option conflicts with the one already configured.
@@ -80,11 +81,9 @@ function configureUserAuthentication() {
 function configureNetworking() {
   if [ "$AMQ_CLUSTERED" = "true" ]; then
     echo "Broker will be clustered"
-    AMQ_ARGS="$AMQ_ARGS --clustered --cluster-user $AMQ_CLUSTER_USER --cluster-password $AMQ_CLUSTER_PASSWORD --host $BROKER_IP"
-    ACCEPTOR_IP=$BROKER_IP
+    AMQ_ARGS="$AMQ_ARGS --clustered --cluster-user $AMQ_CLUSTER_USER --cluster-password $AMQ_CLUSTER_PASSWORD --host $BROKER_HOST"
   else
-    AMQ_ARGS="$AMQ_ARGS --host 0.0.0.0"
-    ACCEPTOR_IP="0.0.0.0"
+    AMQ_ARGS="$AMQ_ARGS --host $BROKER_HOST"
   fi
 }
 
@@ -139,16 +138,16 @@ function updateAcceptorsForSSL() {
       for protocol in ${protocols[@]}; do
         case "${protocol}" in
         "openwire")
-        acceptors="${acceptors}            <acceptor name=\"artemis-ssl\">tcp://${ACCEPTOR_IP}:61617?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;useEpoll=true;amqpCredits=1000;amqpLowCredits=300;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
+        acceptors="${acceptors}            <acceptor name=\"artemis-ssl\">tcp://${BROKER_HOST}:61617?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;useEpoll=true;amqpCredits=1000;amqpLowCredits=300;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
         ;;
       "mqtt")
-      acceptors="${acceptors}            <acceptor name=\"mqtt-ssl\">tcp://${ACCEPTOR_IP}:8883?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=MQTT;useEpoll=true;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
+      acceptors="${acceptors}            <acceptor name=\"mqtt-ssl\">tcp://${BROKER_HOST}:8883?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=MQTT;useEpoll=true;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
       ;;
     "amqp")
-    acceptors="${acceptors}            <acceptor name=\"amqp-ssl\">tcp://${ACCEPTOR_IP}:5671?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=AMQP;useEpoll=true;amqpCredits=1000;amqpMinCredits=300;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
+    acceptors="${acceptors}            <acceptor name=\"amqp-ssl\">tcp://${BROKER_HOST}:5671?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=AMQP;useEpoll=true;amqpCredits=1000;amqpMinCredits=300;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
     ;;
   "stomp")
-  acceptors="${acceptors}            <acceptor name=\"stomp-ssl\">tcp://${ACCEPTOR_IP}:61612?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=STOMP;useEpoll=true;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
+  acceptors="${acceptors}            <acceptor name=\"stomp-ssl\">tcp://${BROKER_HOST}:61612?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=STOMP;useEpoll=true;connectionsAllowed=${connectionsAllowed};${SSL_OPS}</acceptor>\n"
   ;;
 esac
       done
@@ -184,7 +183,7 @@ function appendAcceptorsFromEnv() {
       # As AMQ_ACCEPTORS was introduced from the operator, the operator makes a safe string for here
       safeAcceptorsFromEnv=$(echo "${acceptorsFromEnv}")
       sed -i "/<\/acceptors>/ s/.*/${safeAcceptorsFromEnv}\n&/g" ${instanceDir}/etc/broker.xml
-      sed -i "s/ACCEPTOR_IP/${ACCEPTOR_IP}/g" ${instanceDir}/etc/broker.xml
+      sed -i "s/BROKER_HOST/${BROKER_HOST}/g" ${instanceDir}/etc/broker.xml
   fi
 }
 
@@ -583,7 +582,7 @@ function configure() {
 
   export CONTAINER_ID=$HOSTNAME
   if [ ! -d ${instanceDir} -o "$AMQ_RESET_CONFIG" = "true" -o ! -f ${instanceDir}/bin/artemis ]; then
-    AMQ_ARGS="--silent --role $AMQ_ROLE --name $AMQ_NAME --http-host $BROKER_IP --java-options=-Djava.net.preferIPv4Stack=true "
+    AMQ_ARGS="--silent --role $AMQ_ROLE --name $AMQ_NAME --http-host $WEB_HOST --java-options=-Djava.net.preferIPv4Stack=true "
     configureUserAuthentication
     if [ -n "$AMQ_DATA_DIR" ]; then
       AMQ_ARGS="$AMQ_ARGS --data ${AMQ_DATA_DIR}"

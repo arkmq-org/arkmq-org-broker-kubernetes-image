@@ -7,7 +7,7 @@ DISABLER_TAG="<!-- Remove this tag to enable custom configuration -->"
 declare -a CONFIG_FILES=("BROKER_XML" "LOG4J2_PROPERTIES")
 
 function swapVars() {
-  sed -i "s/\${BROKER_IP}/$BROKER_IP/g" $1
+  sed -i "s/\${BROKER_IP}/${AMQ_BROKER_HOST:-`hostname -f`}/g" $1
   sed -i "s/\${AMQ_NAME}/$AMQ_NAME/g" $1
   sed -i "s/\${AMQ_ROLE}/$AMQ_ROLE/g" $1
   sed -i "s/\${AMQ_STORAGE_USAGE_LIMIT}/$AMQ_STORAGE_USAGE_LIMIT/g" $1
