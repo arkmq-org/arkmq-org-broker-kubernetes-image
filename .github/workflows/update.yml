@@ -109,7 +109,7 @@ jobs:
         if: ${{ inputs.trigger_release == 'this' || inputs.trigger_release == 'all' }}
         env:
           TRIGGER_CHILDREN: ${{ inputs.trigger_release == 'all' }}
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
