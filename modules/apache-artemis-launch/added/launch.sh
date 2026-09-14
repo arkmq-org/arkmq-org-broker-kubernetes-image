@@ -582,7 +582,10 @@ function configure() {
 
   export CONTAINER_ID=$HOSTNAME
   if [ ! -d ${instanceDir} -o "$AMQ_RESET_CONFIG" = "true" -o ! -f ${instanceDir}/bin/artemis ]; then
-    AMQ_ARGS="--silent --role $AMQ_ROLE --name $AMQ_NAME --http-host $WEB_HOST --java-options=-Djava.net.preferIPv4Stack=true "
+    # This container image is designed for Kubernetes environments
+    # that restrict network domains to a single namespace,
+    # which is why discovery is enabled by default.
+    AMQ_ARGS="--silent --discovery-enabled --role $AMQ_ROLE --name $AMQ_NAME --http-host $WEB_HOST --java-options=-Djava.net.preferIPv4Stack=true "
     configureUserAuthentication
     if [ -n "$AMQ_DATA_DIR" ]; then
       AMQ_ARGS="$AMQ_ARGS --data ${AMQ_DATA_DIR}"
