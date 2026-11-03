@@ -163,8 +163,8 @@ modules:
 
 artifacts:
     - name: "jolokia-javaagent-jar"
-      url: https://repo.maven.apache.org/maven2/org/jolokia/jolokia-agent-jvm/2.1.2/jolokia-agent-jvm-2.1.2-javaagent.jar
-      md5: "3af1d87a2bc49f243a5c5c486b2a676e"
+      url: https://repo.maven.apache.org/maven2/org/jolokia/jolokia-agent-jvm/2.6.3/jolokia-agent-jvm-2.6.3-javaagent.jar
+      md5: "abe6c9868470363bc1c5de031f46f0c1"
       dest: /opt/agents
       target: "jolokia.jar"
     - name: "prometheus-javaagent-jar"
